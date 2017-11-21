@@ -1,0 +1,30 @@
+
+if (!save)
+{
+	save = malloc(BUFF_SIZE);
+	readsize = read(fd, save, BUFF_SIZE);
+	if (leftp = ft_strchr(save, '\n'))
+	{ 
+		*(save + BUFF_SIZE + 1) = '\0'; 
+		*leftp = '\0'; 
+		*line = strdup(save);
+		leftp++;
+		carryp = strdup(leftp); 
+		free(save);
+		save = strcpy(carryp);
+	}
+	else 
+	{	
+		counter = 1;
+		while (!(ft_strchr(save, '\n'))
+		{
+			tempadd = ft_strdup(save);
+			free(save);
+			save = (char*)malloc(BUFF_SIZE + strlen(tempadd) + 1);
+			save[BUFF_SIZE + ft_strlen(tempadd) + 1] = '\0';
+			save = tempadd;
+			readsize = read(fd, (save + ft_strlen(tempadd)), BUFF_SIZE); //ceck for a '\0'	on tempadd		
+			free (tempadd);	
+		} 
+	}
+}	
