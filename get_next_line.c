@@ -10,6 +10,7 @@ int get_next_line(const int fd, char **line)
 
 	if (!save)
 	{
+		ft_putstr("first iteration");
 		save = malloc(BUFF_SIZE);
 		readsize = read(fd, save, BUFF_SIZE);
 		while (readsize > 0 && !(ft_strchr(save, '\n')))
@@ -25,11 +26,30 @@ int get_next_line(const int fd, char **line)
 				free (tempadd);	
 			} 
 		*ft_strchr(save, '\n') = '\0';
+		tempadd = ft_strchr(save, '\0');
+		tempadd++;
 		ret = save;
 		*line = ft_strdup(ret);
-		save = (ret + (strlen(ret)));
+		free (save);
+		save = malloc(BUFF_SIZE - ft_strlen(ret));
+		save = (tempadd);
+		ft_putnbr(ft_strlen(save));
 		ft_putstr(save);
+		ft_putstr(tempadd);
+		ft_putstr("2");
 		free(ret);
+		return (1);
+	}
+	else
+	{
+		ft_putstr("second iteration");
+		ft_putnbr(ft_strlen(save));
+		readsize = 1;
+		if (readsize > 0 && !(ft_strchr(save, '\n')))
+			{
+				ft_putstr(save);
+			} 
+		*line = ft_strdup("test");
 		return (1);
 	}
 	return (1);
@@ -48,11 +68,14 @@ int		main(int argc, char **argv)
 		fd = open(argv[1], O_RDONLY);
 	else
 		return (2);
-	if(get_next_line(fd, &line) == 1)
-	{
+	if (get_next_line(fd, &line) == 1)
+		ft_putstr(" output : ");
 		ft_putendl(line);
-		free(line);	
-	}
+		free(line);
+	if (get_next_line(fd, &line) == 1)
+		ft_putstr(" output : ");
+		ft_putendl(line);
+		//free(line);		
 	if (argc == 2)
 		close(fd);
 	return (0);
