@@ -6,6 +6,8 @@ int get_next_line(const int fd, char **line)
 	char			*tempadd;
 	int 			readsize;
 
+	if (fd < 0)
+		return (-1);
 	if (!save)
 	{
 		save = malloc(BUFF_SIZE);
@@ -35,16 +37,20 @@ int get_next_line(const int fd, char **line)
 		}
 	}
 	tempadd = save;
+//	ft_putchar(tempadd[readsize - ft_strlen(save) - 1]);
+//	ft_putendl(tempadd);
 	if (readsize != 0)
 		*ft_strchr(tempadd, '\n') = '\0';
 	*line = ft_strdup(save);
 	save = (ft_strchr(save, '\0') + 1);
-	if (readsize == 0)
-		save = NULL;
+
+	if (readsize == 0 )
+		return(0);
+//	ft_putchar(tempadd[readsize - ft_strlen(save)]);
 	return (1);
 }
-/*	
-#include <fcntl.h>
+	
+/*#include <fcntl.h>
 
 int		main(int argc, char **argv)
 {
