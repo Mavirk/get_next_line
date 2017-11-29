@@ -54,20 +54,6 @@ int get_next_line(const int fd, char **line)
 			return (1);
 		}
 	}
-	else if (ft_strchr(save, '\n') )
-	{
-		*(ft_strchr(save, '\n')) = '\0';
-		*line = ft_strdup(save);
-		temp = ft_strchr(save, '\0') + 1;
-		if (temp)
-		{
-			temp2 = save;
-			save = ft_strdup(temp);
-			free(temp2);
-			//ft_putstr("2");
-			return (1);
-		}
-	}
 	else if (!(ft_strchr(save, '\n')) && rsize == 0 )
 	{
 		if (ft_strlen(save) > 0)
