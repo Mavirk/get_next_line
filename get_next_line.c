@@ -1,5 +1,19 @@
 #include "get_next_line.h"
 
+char 	*read_line(char **save,int *rsize,char **temp,int fd)
+{
+	while (!ft_strchr(*save,'\n') && *rsize > 0)
+	{
+		*temp = ft_strdup(*save);
+		*save = (char *)malloc(BUFF_SIZE + ft_strlen(*temp));
+		*save = ft_strcpy(*save, *temp);
+		*rsize = read(fd, (*save + ft_strlen(*temp)), BUFF_SIZE);
+		*(*save + ft_strlen(*temp) + BUFF_SIZE) = '\0';
+		free(*temp);
+	}	
+	return("yes");
+}
+
 int get_next_line(const int fd, char **line)
 {
 	static char *save = NULL;
@@ -7,37 +21,18 @@ int get_next_line(const int fd, char **line)
 	char 		*temp2;
 	int			rsize;
 
-
 	rsize = 0;
 	if (!save)
 	{
 		save = (char *)malloc(BUFF_SIZE + 1);
 		rsize = read(fd, save, BUFF_SIZE);
-		while (!ft_strchr(save,'\n') && rsize > 0)
-		{
-			temp = ft_strdup(save);
-			free(save);
-			save = (char *)malloc(BUFF_SIZE + ft_strlen(temp));
-			save = ft_strcpy(save, temp);
-			rsize = read(fd, (save + ft_strlen(temp)), BUFF_SIZE);
-			*(save + ft_strlen(temp) + BUFF_SIZE) = '\0';
-			free(temp);
-		}
+		read_line(&save, &rsize, &temp, fd);
 	}
 	else
 	{
 		rsize = 1;
-		while (!ft_strchr(save,'\n') && rsize > 0)
-		{
-			temp = ft_strdup(save);
-			save = (char *)malloc(BUFF_SIZE + ft_strlen(temp));
-			save = ft_strcpy(save, temp);
-			rsize = read(fd, (save + ft_strlen(temp)), BUFF_SIZE);
-			*(save + ft_strlen(temp) + BUFF_SIZE) = '\0';
-			free(temp);
-		}
+		read_line(&save, &rsize, &temp, fd);
 	}
-
 	if (rsize < 0)
 		return(-1);
 	if (ft_strchr(save, '\n') )
@@ -50,7 +45,6 @@ int get_next_line(const int fd, char **line)
 			temp2 = save;
 			save = ft_strdup(temp);
 			free(temp2);
-			//ft_putstr("1");
 			return (1);
 		}
 	}
@@ -59,16 +53,9 @@ int get_next_line(const int fd, char **line)
 		if (ft_strlen(save) > 0)
 		{
 			save[ft_strlen(save)] = '\0';
-			//ft_putstr("3");
 			*line = ft_strdup(save);
 			free (save);
 			return(1);
-		}
-		else
-		{
-			free (save);
-			//ft_putstr("exit");
-			return(0);
 		}
 	}
 	free(save);
@@ -76,7 +63,6 @@ int get_next_line(const int fd, char **line)
 }
 	
 #include <fcntl.h>
-
 int		main(int argc, char **argv)
 {
 	int		fd;
@@ -90,7 +76,6 @@ int		main(int argc, char **argv)
 		return (2);
 	while (get_next_line(fd, &line) == 1)
 	{
-		//ft_putstr("output ");
 		ft_putendl(line);
 		free(line);
 	}	
