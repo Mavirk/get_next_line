@@ -40,7 +40,7 @@ int get_next_line(const int fd, char **line)
 
 	if (rsize < 0)
 		return(-1);
-	if (ft_strchr(save, '\n') && rsize > 0)
+	if (ft_strchr(save, '\n') )
 	{
 		*(ft_strchr(save, '\n')) = '\0';
 		*line = ft_strdup(save);
@@ -54,7 +54,7 @@ int get_next_line(const int fd, char **line)
 			return (1);
 		}
 	}
-	else if (ft_strchr(save, '\n') && rsize == 0)
+	else if (ft_strchr(save, '\n') )
 	{
 		*(ft_strchr(save, '\n')) = '\0';
 		*line = ft_strdup(save);
