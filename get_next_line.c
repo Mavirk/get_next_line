@@ -4,6 +4,7 @@ char 	*read_line(char **save, int *rsize, char **temp, int fd)
 {
 	while (!ft_strchr(*save,'\n') && *rsize > 0)
 	{
+
 		*temp = ft_strdup(*save);
 		*save = (char *)malloc(BUFF_SIZE + ft_strlen(*temp));
 		ft_strcpy(*save, *temp);
@@ -14,76 +15,66 @@ char 	*read_line(char **save, int *rsize, char **temp, int fd)
 	return("yes");
 }
 
+int	check_save(char **save, char **temp, char ***line)
+{
+	char *temp2;
+
+	if (ft_strchr(*save, '\n'))
+	{
+		if (ft_strlen(*save) == 1)
+		{
+			ft_strdel(save);
+			return(0);
+		}
+		*temp = ft_strchr(*save, '\n') + 1;
+		*(ft_strchr(*save, '\n')) = '\0';
+		**line = ft_strdup(*save);
+		if (**temp != '\0')
+		{
+			temp2 = *save;
+			*save = ft_strdup(*temp);
+			ft_strdel(&temp2);
+		}
+		else 
+			ft_strdel(save);
+		return (0);
+	}
+	return (1);
+}
+
 int get_next_line(const int fd, char **line)
 {
 	static char *save = NULL;
 	char		*temp;
-	char 		*temp2;
 	int			rsize;
 
-	//ft_putendl("in");
 	rsize = 1;
 	if (!save)
 	{
 		save = (char *)malloc(BUFF_SIZE + 1);
 		rsize = read(fd, save, BUFF_SIZE);
-		ft_putnbr(rsize);
+		save[rsize] = '\0';
 		if (rsize == 0 || (rsize == 1 && ft_strcmp(save, "\n")))
 		{
-			ft_putendl("strue");
-			free(save);
+			ft_strdel(&save);
 			return(0);
 		}
-	}
-	else
-	{
-		ft_putstr("save is:");
-		ft_putendl(save);
 	}
 	read_line(&save, &rsize, &temp, fd);
 	if (rsize < 0)
+	{
+		if (*save)
+			ft_strdel(&save);
 		return(-1);
-	if (ft_strchr(save, '\n'))
+	}
+	if (check_save(&save, &temp, &line) && *save && !(ft_strchr(save, '\n')) && rsize == 0)
 	{
-		ft_putendl("in");
-		if (ft_strlen(save) == 1)
-		{
-			ft_putendl("strue2");
-			free(save);
-			return(0);
-		}
-		temp = ft_strchr(save, '\n') + 1;
-		*(ft_strchr(save, '\n')) = '\0';
 		*line = ft_strdup(save);
-		if (*temp != '\0')
-		{
-			ft_putstr("temp true:");
-			temp2 = save;
-			save = ft_strdup(temp);
-			ft_putnbr(ft_strlen(save));
-			ft_putendl("");
-			free(temp2);
-		}
-		else 
-		{
-			free (save);
-			save = NULL;
-		}
+		ft_strdel(&save);
 	}
-	else if (!(ft_strchr(save, '\n')) && rsize == 0 )
-	{
-		if (save)
-		{
-			//ft_putendl("true");
-			*line = ft_strdup(save);
-			free(save);
-			save = NULL;
-		}
-	}
-	ft_putendl("true");
-	return (1);
+	return(1);
 }
-
+/*
 #include <string.h>
 #include <stdio.h>
 #include <fcntl.h>
@@ -127,8 +118,8 @@ int				main(void)
 		printf("An error occured while opening file %s\n", filename);
 	return (0);
 }
-	
-/*#include <fcntl.h>
+
+#include <fcntl.h>
 int		main(int argc, char **argv)
 {
 	int		fd;
