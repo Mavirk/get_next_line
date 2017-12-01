@@ -27,6 +27,7 @@ int get_next_line(const int fd, char **line)
 	{
 		save = (char *)malloc(BUFF_SIZE + 1);
 		rsize = read(fd, save, BUFF_SIZE);
+		ft_putnbr(rsize);
 		if (rsize == 0 || (rsize == 1 && ft_strcmp(save, "\n")))
 		{
 			ft_putendl("strue");
@@ -34,26 +35,39 @@ int get_next_line(const int fd, char **line)
 			return(0);
 		}
 	}
+	else
+	{
+		ft_putstr("save is:");
+		ft_putendl(save);
+	}
 	read_line(&save, &rsize, &temp, fd);
 	if (rsize < 0)
 		return(-1);
 	if (ft_strchr(save, '\n'))
 	{
-		ft_putendl("true");
+		ft_putendl("in");
 		if (ft_strlen(save) == 1)
 		{
-			ft_putendl("strue");
+			ft_putendl("strue2");
 			free(save);
 			return(0);
 		}
+		temp = ft_strchr(save, '\n') + 1;
 		*(ft_strchr(save, '\n')) = '\0';
 		*line = ft_strdup(save);
-		temp = ft_strchr(save, '\0') + 1;
-		if (temp)
+		if (*temp != '\0')
 		{
+			ft_putstr("temp true:");
 			temp2 = save;
 			save = ft_strdup(temp);
+			ft_putnbr(ft_strlen(save));
+			ft_putendl("");
 			free(temp2);
+		}
+		else 
+		{
+			free (save);
+			save = NULL;
 		}
 	}
 	else if (!(ft_strchr(save, '\n')) && rsize == 0 )
@@ -66,9 +80,10 @@ int get_next_line(const int fd, char **line)
 			save = NULL;
 		}
 	}
+	ft_putendl("true");
 	return (1);
 }
-/*
+
 #include <string.h>
 #include <stdio.h>
 #include <fcntl.h>
@@ -111,9 +126,9 @@ int				main(void)
 	else
 		printf("An error occured while opening file %s\n", filename);
 	return (0);
-}*/
+}
 	
-#include <fcntl.h>
+/*#include <fcntl.h>
 int		main(int argc, char **argv)
 {
 	int		fd;
@@ -134,4 +149,4 @@ int		main(int argc, char **argv)
 	if (argc == 2)
 		close(fd);
 	return (0);
-}
+}*/
