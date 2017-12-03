@@ -47,6 +47,7 @@ int		chk_sv(char **sv, char **t, char ***line)
 		}
 		else
 			ft_strdel(sv);
+		
 		return (0);
 	}
 	return (1);
