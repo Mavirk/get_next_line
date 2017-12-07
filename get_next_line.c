@@ -16,12 +16,14 @@ void	read_line(char **sv, int *rsize, char **t, int fd)
 {
 	while (!ft_strchr(*sv, '\n') && *rsize > 0)
 	{
-		*t = ft_strdup(*sv);
-		*sv = (char *)malloc(BUFF_SIZE + ft_strlen(*t));
-		ft_strcpy(*sv, *t);
-		*rsize = read(fd, (*sv + ft_strlen(*t)), BUFF_SIZE);
-		*(*sv + ft_strlen(*t) + BUFF_SIZE) = '\0';
-		free(*t);
+		 *t = ft_strdup(*sv);
+		 if (*sv)
+		 	free(*sv);
+		 *sv = (char *)malloc(BUFF_SIZE + ft_strlen(*t) + 1);
+		 ft_strcpy(*sv, *t);
+		 *rsize = read(fd, (*sv + ft_strlen(*t)), BUFF_SIZE);
+		 *(*sv + ft_strlen(*t) + *rsize) = '\0';
+		 free(*t);
 	}
 }
 
@@ -47,7 +49,6 @@ int		chk_sv(char **sv, char **t, char ***line)
 		}
 		else
 			ft_strdel(sv);
-		
 		return (0);
 	}
 	return (1);
@@ -59,6 +60,8 @@ int		get_next_line(const int fd, char **line)
 	char		*t;
 	int			rsize;
 
+	if (!line)
+		return(-1);
 	rsize = 1;
 	if (!sv)
 	{
