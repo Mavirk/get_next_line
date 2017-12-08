@@ -60,31 +60,93 @@ int		get_next_line(const int fd, char **line)
 	char		*t;
 	int			rsize;
 
+	ft_putendl("1");
 	if (!line)
 		return(-1);
+	ft_putendl("2");
 	rsize = 1;
 	if (!sv)
 	{
+		ft_putendl("3");
 		sv = (char *)malloc(BUFF_SIZE + 1);
 		rsize = read(fd, sv, BUFF_SIZE);
+		ft_putnbr(rsize);
+		ft_putendl(" == rsize");
 		sv[rsize] = '\0';
 		if (rsize == 0 || (rsize == 1 && ft_strcmp(sv, "\n")))
 		{
+			ft_putendl("error");
 			ft_strdel(&sv);
 			return (0);
 		}
+		ft_putendl("4");
 	}
 	read_line(&sv, &rsize, &t, fd);
 	if (rsize < 0)
 	{
+		ft_putendl("5");
 		if (*sv)
 			ft_strdel(&sv);
 		return (-1);
 	}
 	if (chk_sv(&sv, &t, &line) && *sv && !(ft_strchr(sv, '\n')) && rsize == 0)
 	{
+		ft_putendl("6");
 		*line = ft_strdup(sv);
 		ft_strdel(&sv);
 	}
+	ft_putendl("7");
 	return (1);
 }
+
+#include <string.h>
+#include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include "get_next_line.h"
+
+/*
+**  1 line with 8 chars with Line Feed
+*/
+
+int				main(void)
+{
+	char		*line;
+	int			fd;
+	char		*filename;
+
+
+	filename = "test.txt";
+	fd = open(filename, O_RDONLY);
+	while (get_next_line(fd, &line) == 1)
+	{
+		ft_putstr("output :");
+		ft_putendl(line);
+	}
+	if (line)
+		ft_strdel(&line);
+	ft_putendl("return");
+	return (1);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
